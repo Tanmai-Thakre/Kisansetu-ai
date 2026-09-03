@@ -1,0 +1,13 @@
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+sqlalchemy==2.0.30
+psycopg2-binary; sys_platform != "win32"
+# Windows: install psycopg2 via: pip install psycopg2 (requires PostgreSQL client libs)
+# Or use: pip install psycopg2-binary --only-binary psycopg2-binary
+python-dotenv==1.0.1
+pydantic[email]==2.7.1
+alembic==1.13.1
+python-multipart==0.0.9
+httpx==0.27.0
+pytest==8.2.0
+pytest-asyncio==0.23.7

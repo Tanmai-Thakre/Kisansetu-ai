@@ -1,0 +1,94 @@
+{
+  "nav": {
+    "home": "Home",
+    "market": "Market",
+    "buyers": "Buyers",
+    "advisor": "Advisor",
+    "quality": "Quality",
+    "income": "Income",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "logout": "Logout"
+  },
+  "app": {
+    "name": "KisanSetu AI",
+    "tagline": "Smart farming, better prices",
+    "demo_notice": "⚠️ DEMO DATA — Not live market prices"
+  },
+  "market": {
+    "title": "Market Prices",
+    "current_price": "Current Price",
+    "cotton": "Cotton",
+    "groundnut": "Groundnut",
+    "per_quintal": "per quintal",
+    "min_price": "Min Price",
+    "max_price": "Max Price",
+    "modal_price": "Modal Price",
+    "price_trend": "Price Trend",
+    "arrival": "Arrivals",
+    "mandi": "Mandi",
+    "district": "District",
+    "last_updated": "Last Updated"
+  },
+  "buyers": {
+    "title": "Find Buyers",
+    "best_buyer": "Best Buyer",
+    "verified": "Verified",
+    "offered_price": "Offered Price",
+    "quantity": "Quantity",
+    "quality": "Quality",
+    "contact": "Contact Buyer",
+    "all_buyers": "All Buyers"
+  },
+  "advisor": {
+    "title": "Sell or Store?",
+    "ai_recommendation": "AI Recommendation",
+    "pending": "AI recommendations will appear here once IBM Granite integration is complete.",
+    "sell_now": "Sell Now",
+    "store": "Store"
+  },
+  "quality": {
+    "title": "Check Crop Quality",
+    "grade": "Quality Grade",
+    "grade_a": "Grade A — Premium",
+    "grade_b": "Grade B — Standard",
+    "grade_c": "Grade C — Basic",
+    "pending": "AI quality grading coming in Phase 2"
+  },
+  "income": {
+    "title": "Income Dashboard",
+    "expected_income": "Expected Income",
+    "pending": "Income projections coming in Phase 2"
+  },
+  "actions": {
+    "check_market_prices": "Check Market Prices",
+    "find_buyers": "Find Buyers",
+    "sell_or_store": "Sell or Store?",
+    "check_crop_quality": "Check Crop Quality",
+    "ask_kisansetu_ai": "Ask KisanSetu AI",
+    "login": "Login",
+    "register": "Register",
+    "submit": "Submit",
+    "cancel": "Cancel"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "phone": "Phone Number",
+    "password": "Password",
+    "name": "Full Name",
+    "select_role": "I am a",
+    "farmer": "Farmer",
+    "buyer": "Buyer",
+    "already_have_account": "Already have an account?",
+    "no_account": "Don't have an account?"
+  },
+  "profile": {
+    "title": "My Profile",
+    "village": "Village",
+    "district": "District",
+    "state": "State",
+    "land_area": "Land Area (acres)",
+    "language": "Language"
+  }
+}

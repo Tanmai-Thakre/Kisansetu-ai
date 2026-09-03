@@ -1,0 +1,94 @@
+{
+  "nav": {
+    "home": "હોમ",
+    "market": "બજાર",
+    "buyers": "ખરીદદારો",
+    "advisor": "સલાહ",
+    "quality": "ગુણવત્તા",
+    "income": "આવક",
+    "profile": "પ્રોફાઇલ",
+    "dashboard": "ડેશબોર્ડ",
+    "logout": "લૉગ આઉટ"
+  },
+  "app": {
+    "name": "કિસાનસેતુ AI",
+    "tagline": "સ્માર્ટ ખેતી, સારા ભાવ",
+    "demo_notice": "⚠️ ડેમો ડેટા — લાઈવ બજાર ભાવ નથી"
+  },
+  "market": {
+    "title": "બજાર ભાવ",
+    "current_price": "હાલનો ભાવ",
+    "cotton": "કપાસ",
+    "groundnut": "મગફળી",
+    "per_quintal": "પ્રતિ ક્વિન્ટલ",
+    "min_price": "ન્યૂનતમ ભાવ",
+    "max_price": "મહત્તમ ભાવ",
+    "modal_price": "મોડલ ભાવ",
+    "price_trend": "ભાવ વલણ",
+    "arrival": "આવક",
+    "mandi": "મંડી",
+    "district": "જિલ્લો",
+    "last_updated": "છેલ્લે અપડેટ"
+  },
+  "buyers": {
+    "title": "ખરીદદારો શોધો",
+    "best_buyer": "શ્રેષ્ઠ ખરીદદાર",
+    "verified": "ચકાસાયેલ",
+    "offered_price": "ઓફર ભાવ",
+    "quantity": "જથ્થો",
+    "quality": "ગુણવત્તા",
+    "contact": "ખરીદદારનો સંપર્ક કરો",
+    "all_buyers": "તમામ ખરીદદારો"
+  },
+  "advisor": {
+    "title": "વેચો કે સંગ્રહ કરો?",
+    "ai_recommendation": "AI ભલામણ",
+    "pending": "IBM Granite ઇન્ટિગ્રેશન પૂર્ણ થયા પછી AI ભલામણો અહીં દેખાશે.",
+    "sell_now": "હવે વેચો",
+    "store": "સંગ્રહ કરો"
+  },
+  "quality": {
+    "title": "પાક ગુણવત્તા તપાસો",
+    "grade": "ગુણવત્તા ગ્રેડ",
+    "grade_a": "ગ્રેડ A — પ્રીમિયમ",
+    "grade_b": "ગ્રેડ B — માનક",
+    "grade_c": "ગ્રેડ C — સામાન્ય",
+    "pending": "AI ગ્રેડિંગ Phase 2 માં આવશે"
+  },
+  "income": {
+    "title": "આવક ડેશબોર્ડ",
+    "expected_income": "અપેક્ષિત આવક",
+    "pending": "આવક અંદાજ Phase 2 માં આવશે"
+  },
+  "actions": {
+    "check_market_prices": "બજાર ભાવ તપાસો",
+    "find_buyers": "ખરીદદારો શોધો",
+    "sell_or_store": "વેચો કે સંગ્રહ?",
+    "check_crop_quality": "પાક ગુણવત્તા તપાસો",
+    "ask_kisansetu_ai": "KisanSetu AI ને પૂછો",
+    "login": "લૉગ ઇન",
+    "register": "નોંધણી",
+    "submit": "સબમિટ",
+    "cancel": "રદ કરો"
+  },
+  "auth": {
+    "login": "લૉગ ઇન",
+    "register": "નોંધણી",
+    "phone": "ફોન નંબર",
+    "password": "પાસવર્ડ",
+    "name": "પૂરું નામ",
+    "select_role": "હું છું",
+    "farmer": "ખેડૂત",
+    "buyer": "ખરીદદાર",
+    "already_have_account": "પહેલેથી એકાઉન્ટ છે?",
+    "no_account": "એકાઉન્ટ નથી?"
+  },
+  "profile": {
+    "title": "મારી પ્રોફાઇલ",
+    "village": "ગામ",
+    "district": "જિલ્લો",
+    "state": "રાજ્ય",
+    "land_area": "જમીન (એકર)",
+    "language": "ભાષા"
+  }
+}

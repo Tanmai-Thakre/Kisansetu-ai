@@ -1,0 +1,94 @@
+{
+  "nav": {
+    "home": "होम",
+    "market": "बाज़ार",
+    "buyers": "खरीदार",
+    "advisor": "सलाहकार",
+    "quality": "गुणवत्ता",
+    "income": "आय",
+    "profile": "प्रोफ़ाइल",
+    "dashboard": "डैशबोर्ड",
+    "logout": "लॉग आउट"
+  },
+  "app": {
+    "name": "किसानसेतु AI",
+    "tagline": "स्मार्ट खेती, बेहतर दाम",
+    "demo_notice": "⚠️ डेमो डेटा — लाइव बाज़ार भाव नहीं"
+  },
+  "market": {
+    "title": "बाज़ार भाव",
+    "current_price": "वर्तमान भाव",
+    "cotton": "कपास",
+    "groundnut": "मूंगफली",
+    "per_quintal": "प्रति क्विंटल",
+    "min_price": "न्यूनतम भाव",
+    "max_price": "अधिकतम भाव",
+    "modal_price": "मोडल भाव",
+    "price_trend": "भाव रुझान",
+    "arrival": "आवक",
+    "mandi": "मंडी",
+    "district": "जिला",
+    "last_updated": "अंतिम अपडेट"
+  },
+  "buyers": {
+    "title": "खरीदार खोजें",
+    "best_buyer": "सर्वश्रेष्ठ खरीदार",
+    "verified": "सत्यापित",
+    "offered_price": "प्रस्तावित भाव",
+    "quantity": "मात्रा",
+    "quality": "गुणवत्ता",
+    "contact": "खरीदार से संपर्क करें",
+    "all_buyers": "सभी खरीदार"
+  },
+  "advisor": {
+    "title": "बेचें या रखें?",
+    "ai_recommendation": "AI सुझाव",
+    "pending": "IBM Granite एकीकरण के बाद यहाँ AI सुझाव दिखाई देंगे।",
+    "sell_now": "अभी बेचें",
+    "store": "रखें"
+  },
+  "quality": {
+    "title": "फसल गुणवत्ता जाँचें",
+    "grade": "गुणवत्ता ग्रेड",
+    "grade_a": "ग्रेड A — प्रीमियम",
+    "grade_b": "ग्रेड B — मानक",
+    "grade_c": "ग्रेड C — सामान्य",
+    "pending": "AI ग्रेडिंग Phase 2 में आएगी"
+  },
+  "income": {
+    "title": "आय डैशबोर्ड",
+    "expected_income": "अपेक्षित आय",
+    "pending": "आय अनुमान Phase 2 में आएगा"
+  },
+  "actions": {
+    "check_market_prices": "बाज़ार भाव जाँचें",
+    "find_buyers": "खरीदार खोजें",
+    "sell_or_store": "बेचें या रखें?",
+    "check_crop_quality": "फसल गुणवत्ता जाँचें",
+    "ask_kisansetu_ai": "KisanSetu AI से पूछें",
+    "login": "लॉगिन",
+    "register": "पंजीकरण",
+    "submit": "सबमिट",
+    "cancel": "रद्द करें"
+  },
+  "auth": {
+    "login": "लॉगिन",
+    "register": "पंजीकरण",
+    "phone": "फ़ोन नंबर",
+    "password": "पासवर्ड",
+    "name": "पूरा नाम",
+    "select_role": "मैं हूँ",
+    "farmer": "किसान",
+    "buyer": "खरीदार",
+    "already_have_account": "पहले से खाता है?",
+    "no_account": "खाता नहीं है?"
+  },
+  "profile": {
+    "title": "मेरी प्रोफ़ाइल",
+    "village": "गाँव",
+    "district": "जिला",
+    "state": "राज्य",
+    "land_area": "भूमि (एकड़)",
+    "language": "भाषा"
+  }
+}
