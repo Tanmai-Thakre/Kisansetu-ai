@@ -11,6 +11,8 @@ import { BestBuyerCard } from "@/components/dashboard/BestBuyerCard";
 import { AIRecommendationCard } from "@/components/dashboard/AIRecommendationCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import api, { endpoints, fetchQualityHistory, fetchIncomePreview } from "@/lib/api";
+import { AIChatWidget } from "@/components/dashboard/AIChatWidget";
+import { DemoPanel } from "@/components/dashboard/DemoPanel";
 import type { FarmerDashboardResponse, QualityHistoryItem, QualityGradeLevel, IncomeResponse } from "@/types";
 
 // Demo fallback data (used if API is not running)
@@ -131,13 +133,13 @@ export default function FarmerDashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-gray-900">
-                નમસ્તે, {data.farmer_name.split(" ")[0]}! 👋
+                {language === "gu" ? "નમસ્તે" : language === "hi" ? "नमस्ते" : "Hello"}, {data.farmer_name.split(" ")[0]}! 👋
               </h2>
-              <p className="text-sm text-gray-500">Gujarat • {new Date().toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long" })}</p>
+              <p className="text-sm text-gray-500">Gujarat • {new Date().toLocaleDateString(language === "en" ? "en-IN" : "hi-IN", { weekday: "long", day: "numeric", month: "long" })}</p>
             </div>
             {apiStatus === "demo" && (
-              <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium">
-                Demo Mode
+              <span className="text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded-full font-medium border border-amber-200">
+                ○ {t("status.demo")}
               </span>
             )}
           </div>
@@ -164,12 +166,12 @@ export default function FarmerDashboardPage() {
           {/* Phase 6 — Crop Quality widget */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold text-gray-800">🔬 Crop Quality</h3>
+              <h3 className="text-base font-semibold text-gray-800">🔬 {t("quality.title")}</h3>
               <Link
                 href="/farmer/quality"
                 className="text-xs text-blue-600 hover:text-blue-800 font-medium"
               >
-                View / Assess →
+                {t("quality.assess")} →
               </Link>
             </div>
             {qualityLatest ? (
@@ -178,25 +180,25 @@ export default function FarmerDashboardPage() {
                   <div>
                     <p className="text-sm font-semibold capitalize">{qualityLatest.crop}</p>
                     <p className="text-xs mt-0.5 opacity-80">
-                      Grade: <strong>{qualityLatest.grade}</strong> &nbsp;·&nbsp; Score: {qualityLatest.quality_score}/100
+                      {t("quality.grade")}: <strong>{qualityLatest.grade}</strong> &nbsp;·&nbsp; {t("quality.score")}: {qualityLatest.quality_score}/100
                     </p>
                   </div>
                   <Link
                     href="/farmer/quality"
                     className="text-xs px-3 py-1.5 rounded-lg bg-white bg-opacity-60 font-medium border border-current hover:bg-opacity-80 transition-colors"
                   >
-                    View Report
+                    {t("quality.history")}
                   </Link>
                 </div>
               </div>
             ) : (
               <div className="text-center py-3">
-                <p className="text-sm text-gray-400">No quality assessment yet.</p>
+                <p className="text-sm text-gray-400">{t("quality.no_assessment")}</p>
                 <Link
                   href="/farmer/quality"
                   className="mt-2 inline-block text-xs text-blue-600 hover:text-blue-800 font-medium"
                 >
-                  Start Quality Check →
+                  {t("quality.assess")} →
                 </Link>
               </div>
             )}
@@ -205,31 +207,31 @@ export default function FarmerDashboardPage() {
           {/* Phase 7 — Income Snapshot widget */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold text-gray-800">💰 Income Snapshot</h3>
+              <h3 className="text-base font-semibold text-gray-800">💰 {t("income.title")}</h3>
               <Link
                 href="/farmer/income"
                 className="text-xs text-green-600 hover:text-green-800 font-medium"
               >
-                View Income Details →
+                {t("actions.view_income")} →
               </Link>
             </div>
             {incomeSnap ? (
               <div>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   <div className="bg-gray-50 rounded-xl p-3">
-                    <p className="text-xs text-gray-400">Estimated Net Income</p>
+                    <p className="text-xs text-gray-400">{t("income.net_income")}</p>
                     <p className="text-lg font-black text-gray-900">
                       ₹{Math.round(incomeSnap.best_net_income ?? incomeSnap.current_estimated_income).toLocaleString("en-IN")}
                     </p>
-                    <p className="text-xs text-gray-400 mt-0.5">Cotton · 100 qtl</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{t("market.cotton")} · 100 {language === "gu" ? "ક્વિ" : language === "hi" ? "क्वि" : "qtl"}</p>
                   </div>
                   <div className="bg-green-50 rounded-xl p-3 border border-green-100">
-                    <p className="text-xs text-green-600">Highest Estimated Return</p>
+                    <p className="text-xs text-green-600">{t("income.best_scenario")}</p>
                     <p className="text-sm font-bold text-green-800 leading-tight mt-0.5">
                       {incomeSnap.best_scenario ?? "—"}
                     </p>
                     <p className="text-xs text-green-600 mt-0.5">
-                      Diff: ₹{Math.round(incomeSnap.income_difference).toLocaleString("en-IN")}
+                      {t("income.diff_vs_now")}: ₹{Math.round(incomeSnap.income_difference).toLocaleString("en-IN")}
                     </p>
                   </div>
                 </div>
@@ -237,25 +239,38 @@ export default function FarmerDashboardPage() {
                   href="/farmer/income"
                   className="block w-full text-center text-xs text-green-700 font-semibold bg-green-50 border border-green-200 rounded-xl py-2 hover:bg-green-100 transition-colors"
                 >
-                  📊 View Full Income Dashboard
+                  📊 {t("actions.view_income")}
                 </Link>
               </div>
             ) : (
               <div className="text-center py-3">
-                <p className="text-sm text-gray-400">Income data not available.</p>
+                <p className="text-sm text-gray-400">{t("income.no_income")}</p>
                 <Link
                   href="/farmer/income"
                   className="mt-2 inline-block text-xs text-green-600 hover:text-green-800 font-medium"
                 >
-                  Open Income Dashboard →
+                  {t("actions.view_income")} →
                 </Link>
               </div>
             )}
           </div>
 
+          {/* Phase 8 — AI Chat widget */}
+          <AIChatWidget
+            language={language}
+            farmerId={1}
+            crop="cotton"
+            mandi="Rajkot APMC"
+            quantity={100}
+            compact
+          />
+
+          {/* Phase 9 — Demo Panel */}
+          <DemoPanel language={language} />
+
           {/* Demo notice */}
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-700">
-            <strong>⚠️ DEMO DATA</strong> — {data.note}
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-sm text-amber-700" role="status">
+            <strong>⚠️ {t("status.demo")}</strong> — {t("demo.notice")}
           </div>
         </main>
       </div>

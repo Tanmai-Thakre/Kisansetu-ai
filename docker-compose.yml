@@ -7,15 +7,15 @@ services:
     container_name: kisansetu_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: kisansetu
-      POSTGRES_PASSWORD: kisansetu
-      POSTGRES_DB: kisansetu_db
+      POSTGRES_USER: ${POSTGRES_USER:-kisansetu}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kisansetu}
+      POSTGRES_DB: ${POSTGRES_DB:-kisansetu_db}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U kisansetu -d kisansetu_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-kisansetu} -d ${POSTGRES_DB:-kisansetu_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -30,35 +30,50 @@ services:
     env_file:
       - .env
     environment:
-      DATABASE_URL: postgresql://kisansetu:kisansetu@db:5432/kisansetu_db
-      CORS_ORIGINS: http://localhost:3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-kisansetu}:${POSTGRES_PASSWORD:-kisansetu}@db:5432/${POSTGRES_DB:-kisansetu_db}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      # IBM Granite — set in .env (never hardcode here)
+      # IBM_API_KEY:
+      # IBM_PROJECT_ID:
+      # IBM_GRANITE_MODEL: ibm/granite-3-8b-instruct
+      # IBM_REGION: us-south
     ports:
       - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - ./backend:/app
+      - ./backend/uploads:/app/uploads   # persist uploaded quality images
     command: >
       sh -c "
         python app/database/migrate.py &&
-        python /app/../data/seed/seed.py &&
-        uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+        python -c 'import sys; sys.path.insert(0, \"/data\"); from seed.seed import seed; seed()' 2>/dev/null || true &&
+        uvicorn main:app --host 0.0.0.0 --port 8000
       "
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   # ── Next.js Frontend ──────────────────────────────────────────────────────
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
     container_name: kisansetu_frontend
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      NODE_ENV: production
     ports:
       - "3000:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
 volumes:
   postgres_data:

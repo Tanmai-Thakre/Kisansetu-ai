@@ -226,14 +226,16 @@ export default function MarketPage() {
           {/* Header row */}
           <div className="flex items-start justify-between flex-wrap gap-2">
             <div>
-              <h1 className="text-xl font-bold text-gray-900">📈 Market Intelligence</h1>
-              <p className="text-sm text-gray-500 mt-0.5">Gujarat Mandi Prices — Cotton & Groundnut</p>
+              <h1 className="text-xl font-bold text-gray-900">📈 {t("market.title")}</h1>
+              <p className="text-sm text-gray-500 mt-0.5">
+                {language === "gu" ? "ગુજરાત મંડી ભાવ — કપાસ અને મગફળી" : language === "hi" ? "गुजरात मंडी भाव — कपास और मूंगफली" : "Gujarat Mandi Prices — Cotton & Groundnut"}
+              </p>
             </div>
             <DataFreshnessBadge
               source={sourceInfo.source}
               sourceStatus={sourceInfo.source_status}
               isLive={sourceInfo.is_live}
-              tooltip="This prototype uses synthetic demonstration data. Live market integration available via MarketDataProvider."
+              tooltip={t("market.disclaimer")}
             />
           </div>
 
@@ -306,17 +308,22 @@ export default function MarketPage() {
           {/* Best mandi recommendation */}
           {bestMandi && <BestMandiCard data={bestMandi} />}
 
-          {/* ── Phase 3: AI Price Forecast section ─────────────────────────── */}
+          {/* AI Price Forecast section */}
           <div className="rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 border border-indigo-100 px-4 py-3">
             <div className="flex items-center gap-2 mb-3">
-              <span className="text-lg">🔮</span>
-              <h2 className="font-bold text-indigo-800 text-base">AI Price Forecast</h2>
+              <span className="text-lg" aria-hidden="true">🔮</span>
+              <h2 className="font-bold text-indigo-800 text-base">{t("market.forecast")}</h2>
               <span className="text-xs bg-indigo-100 text-indigo-600 px-2 py-0.5 rounded-full font-medium ml-auto">
-                Phase 3 Active
+                {t("status.forecast")}
               </span>
             </div>
             <p className="text-xs text-indigo-500 mb-3">
-              Select a crop and mandi above — the RandomForest model will forecast 7, 15, and 30-day prices.
+              {language === "gu"
+                ? "ઉપર પાક અને મંડી પસંદ કરો — AI 7, 15 અને 30 દિવસ ભાવ અનુમાન કરશે."
+                : language === "hi"
+                ? "ऊपर फसल और मंडी चुनें — AI 7, 15 और 30 दिन भाव का अनुमान लगाएगा।"
+                : "Select a crop and mandi above — the AI model will forecast 7, 15, and 30-day prices."
+              }
             </p>
 
             {/* Mandi selector for forecast */}
@@ -349,9 +356,11 @@ export default function MarketPage() {
             <Card>
               <CardContent>
                 <div className="text-center py-6">
-                  <p className="text-3xl mb-2">🔮</p>
-                  <p className="font-semibold text-gray-700 text-sm">Forecast unavailable</p>
-                  <p className="text-xs text-gray-400 mt-1">Start the backend to generate AI price forecasts.</p>
+                  <p className="text-3xl mb-2" aria-hidden="true">🔮</p>
+                  <p className="font-semibold text-gray-700 text-sm">
+                    {language === "gu" ? "ભાવ અનુમાન ઉપલબ્ધ નથી" : language === "hi" ? "भाव अनुमान उपलब्ध नहीं" : t("errors.no_market_data")}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">{t("market.disclaimer")}</p>
                 </div>
               </CardContent>
             </Card>

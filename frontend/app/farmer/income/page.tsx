@@ -20,7 +20,6 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Header } from "@/components/layout/Header";
 import { BottomNav, SideNav } from "@/components/layout/Navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { postIncomeDashboard } from "@/lib/api";
 import type { IncomeResponse, IncomeScenario } from "@/types";
@@ -253,42 +252,45 @@ export default function IncomePage() {
         <main className="flex-1 max-w-2xl mx-auto px-4 py-6 pb-28 sm:pb-8 space-y-5">
 
           {/* Page header */}
-          <div className="flex items-start justify-between flex-wrap gap-2">
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">💰 Income Dashboard</h1>
-              <p className="text-sm text-gray-500 mt-0.5">Compare estimated net income for all selling strategies</p>
-            </div>
-            <Badge variant="green">Phase 7 Active</Badge>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">💰 {t("income.title")}</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {language === "gu" ? "બધી વ્યૂહ માટે અનુમાનિત ચોખ્ખી આવક" : language === "hi" ? "सभी रणनीतियों की अनुमानित आय" : "Compare estimated net income for all selling strategies"}
+            </p>
           </div>
 
           {/* ── Input form ─────────────────────────────────────────────────── */}
           <Card>
-            <CardHeader><CardTitle>Crop & Quantity</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>
+                {language === "gu" ? "પાક અને જથ્થો" : language === "hi" ? "फसल और मात्रा" : "Crop & Quantity"}
+              </CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Crop</label>
-                  <select value={crop} onChange={e => setCrop(e.target.value)}
+                  <label htmlFor="income-crop" className="block text-xs font-medium text-gray-500 mb-1.5">{t("income.crop")}</label>
+                  <select id="income-crop" value={crop} onChange={e => setCrop(e.target.value)}
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400">
                     {CROPS.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Mandi</label>
-                  <select value={mandi} onChange={e => setMandi(e.target.value)}
+                  <label htmlFor="income-mandi" className="block text-xs font-medium text-gray-500 mb-1.5">{t("income.mandi")}</label>
+                  <select id="income-mandi" value={mandi} onChange={e => setMandi(e.target.value)}
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400">
                     {MANDIS.map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Quantity (qtl)</label>
-                  <input type="number" value={quantity} min={1}
+                  <label htmlFor="income-qty" className="block text-xs font-medium text-gray-500 mb-1.5">{t("income.quantity")}</label>
+                  <input id="income-qty" type="number" value={quantity} min={1}
                     onChange={e => setQuantity(Math.max(1, Number(e.target.value) || 1))}
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1.5">Storage Cost (₹/qtl/mo)</label>
-                  <input type="number" value={storageCost} min={0}
+                  <label htmlFor="income-storecost" className="block text-xs font-medium text-gray-500 mb-1.5">{t("income.storage_cost")}</label>
+                  <input id="income-storecost" type="number" value={storageCost} min={0}
                     onChange={e => setStorageCost(Math.max(0, Number(e.target.value)))}
                     className="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-400" />
                 </div>

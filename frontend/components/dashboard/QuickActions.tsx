@@ -41,33 +41,43 @@ const ACTIONS = [
     text: "text-white",
   },
   {
+    id: "income",
+    labelKey: "actions.view_income",
+    icon: "💰",
+    href: "/farmer/income",
+    bg: "bg-emerald-600 hover:bg-emerald-700",
+    text: "text-white",
+  },
+  {
     id: "ai",
     labelKey: "actions.ask_kisansetu_ai",
     icon: "🤖",
-    href: "/farmer/advisor",
+    href: "/farmer/chat",
     bg: "bg-indigo-600 hover:bg-indigo-700",
     text: "text-white",
+    wide: true,
   },
 ];
 
 export function QuickActions({ t }: QuickActionsProps) {
   return (
     <div>
-      <h3 className="text-base font-semibold text-gray-800 mb-3">⚡ Quick Actions</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <h3 className="text-base font-semibold text-gray-800 mb-3">⚡ {t("actions.check_market_prices") !== "actions.check_market_prices" ? "" : "Quick "}Actions</h3>
+      <div className="grid grid-cols-3 gap-2.5">
         {ACTIONS.map((action) => (
           <Link
             key={action.id}
             href={action.href}
+            aria-label={t(action.labelKey)}
             className={cn(
-              "flex flex-col items-center justify-center gap-2 p-4 rounded-2xl transition-all duration-200 active:scale-95 shadow-sm",
+              "flex flex-col items-center justify-center gap-1.5 p-3 rounded-2xl transition-all duration-200 active:scale-95 shadow-sm min-h-[80px]",
               action.bg,
               action.text,
-              action.id === "ai" ? "col-span-2 sm:col-span-1" : ""
+              (action as { wide?: boolean }).wide ? "col-span-3" : ""
             )}
           >
-            <span className="text-3xl">{action.icon}</span>
-            <span className="text-sm font-semibold text-center leading-snug">
+            <span className="text-2xl" aria-hidden="true">{action.icon}</span>
+            <span className="text-xs font-semibold text-center leading-snug">
               {t(action.labelKey)}
             </span>
           </Link>

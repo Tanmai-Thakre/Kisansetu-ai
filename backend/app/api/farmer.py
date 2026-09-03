@@ -12,11 +12,12 @@ from app.services.demo_data import get_best_buyer
 router = APIRouter(prefix="/farmer", tags=["Farmer"])
 
 QUICK_ACTIONS = [
-    QuickAction(id="market", label="Check Market Prices", icon="📊", href="/farmer/market", color="green"),
-    QuickAction(id="buyers", label="Find Buyers", icon="🤝", href="/farmer/buyers", color="blue"),
-    QuickAction(id="advisor", label="Sell or Store?", icon="💡", href="/farmer/advisor", color="amber"),
-    QuickAction(id="quality", label="Check Crop Quality", icon="🌾", href="/farmer/quality", color="purple"),
-    QuickAction(id="ai", label="Ask KisanSetu AI", icon="🤖", href="/farmer/advisor", color="indigo"),
+    QuickAction(id="market",  label="Check Market Prices", icon="📊", href="/farmer/market",  color="green"),
+    QuickAction(id="buyers",  label="Find Buyers",          icon="🤝", href="/farmer/buyers",  color="blue"),
+    QuickAction(id="advisor", label="Sell or Store?",       icon="💡", href="/farmer/advisor", color="amber"),
+    QuickAction(id="quality", label="Check Crop Quality",   icon="🌾", href="/farmer/quality", color="purple"),
+    QuickAction(id="income",  label="View Income",          icon="💰", href="/farmer/income",  color="emerald"),
+    QuickAction(id="ai",      label="Ask KisanSetu AI",     icon="🤖", href="/farmer/chat",    color="indigo"),
 ]
 
 

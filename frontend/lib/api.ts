@@ -60,6 +60,15 @@ export const endpoints = {
   incomeDashboard:      "/api/agents/income",
   incomePreview:        "/api/agents/income/preview",
   incomeHistory:        "/api/agents/income/history",
+
+  // AI Chat & Orchestrator — Phase 8
+  chat:                 "/api/chat",
+  chatStatus:           "/api/chat/status",
+  orchestrate:          "/api/agents/orchestrate",
+
+  // Demo Mode — Phase 9
+  demoFarmer:           "/api/demo/farmer",
+  demoRun:              "/api/demo/run",
 };
 
 // ── Typed forecast helpers ────────────────────────────────────────────────────
@@ -215,3 +224,31 @@ export async function fetchIncomePreview(
 }
 
 export default api;
+
+// ── Phase 8 AI Chat helpers ───────────────────────────────────────────────────
+
+import type { ChatRequest, ChatResponse, OrchestrateRequest, OrchestrateResponse, GraniteStatusResponse } from "@/types";
+
+/**
+ * POST /api/chat — AI-powered farmer query via agent orchestrator + IBM Granite.
+ */
+export async function postChat(payload: ChatRequest): Promise<ChatResponse> {
+  const res = await api.post(endpoints.chat, payload, { timeout: 45000 });
+  return res.data as ChatResponse;
+}
+
+/**
+ * GET /api/chat/status — IBM Granite availability indicator.
+ */
+export async function fetchChatStatus(): Promise<GraniteStatusResponse> {
+  const res = await api.get(endpoints.chatStatus);
+  return res.data as GraniteStatusResponse;
+}
+
+/**
+ * POST /api/agents/orchestrate — multi-agent orchestration with full result breakdown.
+ */
+export async function postOrchestrate(payload: OrchestrateRequest): Promise<OrchestrateResponse> {
+  const res = await api.post(endpoints.orchestrate, payload, { timeout: 45000 });
+  return res.data as OrchestrateResponse;
+}

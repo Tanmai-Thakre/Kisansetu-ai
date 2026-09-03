@@ -517,3 +517,61 @@ export interface FarmerDashboardResponse {
   quick_actions: QuickAction[];
   note: string;
 }
+
+// ── Phase 8 AI Chat & Orchestrator types ────────────────────────────────────
+
+export interface ChatRequest {
+  message:                  string;
+  language:                 "en" | "gu" | "hi";
+  farmer_id:                number;
+  crop:                     string;
+  mandi:                    string;
+  quantity:                 number;
+  district?:                string | null;
+  quality_grade?:           string | null;
+  storage_cost_per_quintal?: number;
+  cash_urgency?:            "LOW" | "MEDIUM" | "HIGH";
+}
+
+export interface ChatResponse {
+  answer:         string;
+  agents_used:    string[];
+  data_timestamp: string;
+  confidence:     number;
+  intent?:        string | null;
+  granite_used:   boolean;
+  agents_failed:  string[];
+  request_id?:    string | null;
+}
+
+export interface OrchestrateRequest {
+  farmer_id:                number;
+  message:                  string;
+  language:                 "en" | "gu" | "hi";
+  crop:                     string;
+  mandi:                    string;
+  quantity:                 number;
+  district?:                string | null;
+  quality_grade?:           string | null;
+  storage_cost_per_quintal?: number;
+  cash_urgency?:            "LOW" | "MEDIUM" | "HIGH";
+}
+
+export interface OrchestrateResponse {
+  agents_used:    string[];
+  agents_failed:  string[];
+  results:        Record<string, unknown>;
+  final_answer:   string;
+  intent?:        string | null;
+  granite_used:   boolean;
+  confidence:     number;
+  data_timestamp: string;
+  request_id?:    string | null;
+}
+
+export interface GraniteStatusResponse {
+  available: boolean;
+  model?:    string | null;
+  region?:   string | null;
+  mode:      "granite" | "fallback";
+}

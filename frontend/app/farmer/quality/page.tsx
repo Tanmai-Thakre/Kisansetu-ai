@@ -15,7 +15,6 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { Header } from "@/components/layout/Header";
 import { BottomNav, SideNav } from "@/components/layout/Navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { postQualityAssess, postQualityUpload, fetchQualityHistory } from "@/lib/api";
 import type {
@@ -488,9 +487,9 @@ export default function QualityPage() {
         <main className="flex-1 max-w-2xl mx-auto px-4 py-6 pb-28 sm:pb-8 space-y-5">
 
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-gray-900">🔬 Crop Quality Assessment</h1>
-            <Badge variant="blue">Phase 6</Badge>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">🔬 {t("quality.title")}</h1>
+            <p className="text-sm text-gray-500 mt-0.5">{t("quality.disclaimer")}</p>
           </div>
 
           {/* Step 1 — Crop selection */}
