@@ -38,58 +38,60 @@ All numerical facts come from the underlying deterministic agents.
 ## Architecture
 
 ```mermaid
-graph TD
-    subgraph Frontend ["Next.js 15 Frontend"]
+flowchart TD
+    subgraph Frontend["Next.js 15 Frontend"]
         FD[Farmer Dashboard]
         FC[AI Chat Page]
         FQ[Quick Actions]
         DM[Demo Panel]
-        Nav[Navigation]
     end
 
-    subgraph Backend ["FastAPI Backend (Python 3.11+)"]
-        direction TB
-        MAIN[main.py]
-
-        subgraph APIs ["REST API Layer"]
-            CHAT[/api/chat]
-            ORCH[/api/agents/orchestrate]
-            DEMO[/api/demo]
-            MKT[/api/market]
-            BUY[/api/buyers]
-            QUA[/api/quality]
-            INC[/api/income]
-        end
-
-        subgraph AI ["AI Layer (Phase 8)"]
-            ORC[AgentOrchestrator]
-            GC[GraniteClient]
-            PR[Prompts / Data Grounding]
-        end
-
-        subgraph Agents ["Business Logic Agents"]
-            A1[MandiForecastAgent]
-            A2[BuyerMatchingAgent]
-            A3[StorageAdvisorAgent]
-            A4[QualityGradingAgent]
-            A5[IncomeDashboardAgent]
-        end
-
-        DB[(SQLite / PostgreSQL)]
+    subgraph APIs["REST API Layer"]
+        CHAT["/api/chat"]
+        ORCH["/api/agents/orchestrate"]
+        DEMO["/api/demo"]
+        MKT["/api/market"]
+        BUY["/api/buyers"]
+        QUA["/api/quality"]
+        INC["/api/income"]
     end
 
-    subgraph IBM ["IBM Cloud"]
-        WX[watsonx.ai<br/>IBM Granite 3 8B Instruct]
+    subgraph AILayer["AI Layer"]
+        ORC[AgentOrchestrator]
+        GC[GraniteClient]
+        PR[Prompts / Data Grounding]
+    end
+
+    subgraph Agents["Business Logic Agents"]
+        A1[MandiForecastAgent]
+        A2[BuyerMatchingAgent]
+        A3[StorageAdvisorAgent]
+        A4[QualityGradingAgent]
+        A5[IncomeDashboardAgent]
+    end
+
+    subgraph IBM["IBM Cloud"]
+        WX["watsonx.ai / IBM Granite 3 8B"]
         IAM[IAM Token Service]
     end
+
+    DB[(SQLite / PostgreSQL)]
 
     Frontend --> APIs
     CHAT --> ORC
     ORCH --> ORC
-    ORC --> A1 & A2 & A3 & A4 & A5
+    ORC --> A1
+    ORC --> A2
+    ORC --> A3
+    ORC --> A4
+    ORC --> A5
     ORC --> GC
     GC --> IAM --> WX
-    A1 & A2 & A3 & A4 & A5 --> DB
+    A1 --> DB
+    A2 --> DB
+    A3 --> DB
+    A4 --> DB
+    A5 --> DB
     GC -.->|fallback| PR
 ```
 
