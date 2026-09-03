@@ -17,7 +17,9 @@ import hashlib
 import os
 import pathlib
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
+
+_UTC = timezone.utc
 from typing import Optional, Dict, List, Any
 
 from sqlalchemy.orm import Session
@@ -161,7 +163,7 @@ class QualityService:
             price_impact_percent=result.price_impact_percent,
             reference_price=price_info.get("reference_price"),
             estimated_quality_price=price_info.get("estimated_quality_price"),
-            created_at=datetime.utcnow(),
+            created_at=datetime.now(_UTC),
         )
         db.add(qa)
         db.commit()

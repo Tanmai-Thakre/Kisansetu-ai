@@ -17,7 +17,9 @@ No LLM. No IBM Granite. Pure numerical forecasting.
 from __future__ import annotations
 import math
 import threading
-from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta, timezone
+
+UTC = timezone.utc
 from typing import Optional, Dict, List
 
 from app.services.market_data_provider import get_market_data_provider
@@ -233,7 +235,7 @@ class ForecastingService:
     def _is_cache_valid(self, key: str) -> bool:
         if key not in self._cache:
             return False
-        age = (datetime.utcnow() - self._cache[key]["ts"]).total_seconds()
+        age = (datetime.now(UTC) - self._cache[key]["ts"]).total_seconds()
         return age < CACHE_TTL_SECONDS
 
     def forecast(
@@ -253,7 +255,7 @@ class ForecastingService:
         result = self._compute_forecast(crop, mandi)
 
         with self._lock:
-            self._cache[key] = {"result": result, "ts": datetime.utcnow()}
+            self._cache[key] = {"result": result, "ts": datetime.now(UTC)}
 
         return result
 
@@ -279,7 +281,7 @@ class ForecastingService:
                     f"At least {MIN_HISTORY_DAYS} trading days required "
                     f"({series.n} available)."
                 ),
-                generated_at=datetime.utcnow().isoformat(),
+                generated_at=datetime.now(UTC).isoformat(),
                 model_name="N/A",
                 mae=None, rmse=None,
                 n_history=series.n,
@@ -337,7 +339,7 @@ class ForecastingService:
             expected_change=round(chg, 2),
             expected_change_pct=round(chg_pct, 2),
             explanation=explanation,
-            generated_at=datetime.utcnow().isoformat(),
+            generated_at=datetime.now(UTC).isoformat(),
             model_name=model.model_name,
             mae=metrics.get("mae"),
             rmse=metrics.get("rmse"),

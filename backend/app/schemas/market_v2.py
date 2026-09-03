@@ -4,7 +4,7 @@ Extends Phase 1 schemas without breaking them.
 """
 from datetime import date, datetime
 from typing import Optional, List, Any
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 from enum import Enum
 
 
@@ -66,6 +66,8 @@ class MarketPriceV2Create(BaseModel):
 # ── Response schemas ──────────────────────────────────────────────────────────
 
 class MarketRecordOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     crop: str
     variety: Optional[str] = None
     mandi: str
@@ -79,9 +81,6 @@ class MarketRecordOut(BaseModel):
     unit: str
     source: str
     source_status: str
-
-    class Config:
-        from_attributes = True
 
 
 class PaginatedMarketResponse(BaseModel):

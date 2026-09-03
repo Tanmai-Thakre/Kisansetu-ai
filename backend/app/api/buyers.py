@@ -9,7 +9,9 @@ Extends Phase 1 /api/buyers with:
 from __future__ import annotations
 
 from typing import Optional, List
-from datetime import date, datetime
+from datetime import date, datetime, timezone
+
+_UTC = timezone.utc
 
 from fastapi import APIRouter, Query, HTTPException, Depends
 from sqlalchemy.orm import Session
@@ -164,8 +166,8 @@ async def create_connection_request(
         message       = payload.message,
         match_score   = payload.match_score,
         status        = RequestStatus.PENDING,
-        created_at    = datetime.utcnow(),
-        updated_at    = datetime.utcnow(),
+        created_at    = datetime.now(_UTC),
+        updated_at    = datetime.now(_UTC),
     )
     db.add(req)
     try:
@@ -233,7 +235,7 @@ async def update_request_status(
         )
 
     req.status     = RequestStatus(payload.status)
-    req.updated_at = datetime.utcnow()
+    req.updated_at = datetime.now(_UTC)
     db.commit()
     db.refresh(req)
     return req

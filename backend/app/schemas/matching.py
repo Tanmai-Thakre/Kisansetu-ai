@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 from typing import Optional, List
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 # ── Match score schemas ───────────────────────────────────────────────────────
@@ -76,6 +76,8 @@ class ConnectionRequestCreate(BaseModel):
 
 
 class ConnectionRequestOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id:            int
     farmer_id:     int
     buyer_id:      int
@@ -87,9 +89,6 @@ class ConnectionRequestOut(BaseModel):
     match_score:   Optional[float]
     created_at:    datetime
     updated_at:    datetime
-
-    class Config:
-        from_attributes = True
 
 
 class ConnectionRequestStatusUpdate(BaseModel):

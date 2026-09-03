@@ -197,7 +197,10 @@ cp .env.example .env
 cd backend
 python -m venv venv
 source venv/bin/activate         # Windows: venv\Scripts\activate
+# Production runtime dependencies only:
 pip install -r requirements.txt
+# For running tests, also install dev dependencies:
+# pip install -r requirements-dev.txt
 python -m uvicorn main:app --reload --port 8000
 ```
 
@@ -437,6 +440,9 @@ Expected response fields:
 ```bash
 cd kisansetu-ai/backend
 
+# Install dev dependencies (pytest + pytest-asyncio)
+pip install -r requirements-dev.txt
+
 # All 303 tests
 python -m pytest tests/ -v
 
@@ -475,19 +481,31 @@ KisanSetu AI follows these principles:
 
 - IBM API keys loaded from environment variables, never hardcoded
 - CORS restricted to configured origins (`CORS_ORIGINS` env var)
+- Security headers on every response: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`, `Cache-Control: no-store`
 - Global exception handler prevents stack trace leakage (500 → generic JSON)
 - Pydantic validation on all inputs (422 on bad data)
 - Farmer data scoped to authenticated user via `farmer_id`
 - System prompts never returned in API responses
 - No credentials stored in frontend bundle
+- Production Docker image: no test dependencies installed
 
 ---
 
-## Known Limitations / Issues
+## IBM Cloud Deployment
 
-- **Python 3.14 deprecation warnings** — `datetime.utcnow()` is deprecated in 3.12+; does not affect functionality
-- **Pydantic V2 config warnings** — Legacy `class Config` style in some schemas; does not affect functionality
-- **httpx2 recommendation** — `starlette.testclient` suggests using `httpx2`; tests still pass with `httpx`
+See [`ibm-cloud-deploy.md`](ibm-cloud-deploy.md) for the full IBM Cloud Code Engine deployment guide including:
+
+- Container Registry setup
+- Code Engine application deployment
+- IBM Cloud Databases for PostgreSQL
+- Secrets and ConfigMaps
+- CORS configuration for production URLs
+- Health check verification
+
+---
+
+## Known Limitations
+
 - **No real-time market data** — Uses synthetic data in demo mode; connect a live AGMARKNET/eNAM API key for production
 - **Image upload quality grading** — Phase 6 quality agent supports manual parameter mode; image-based grading requires a vision model (future work)
 - **Voice input** — Placeholder UI exists; not yet functional
@@ -502,8 +520,7 @@ KisanSetu AI follows these principles:
 4. **Image-based quality** — Integrate a vision model for cotton/groundnut image assessment
 5. **Voice input** — Add speech-to-text (Web Speech API / Whisper) for low-literacy farmers
 6. **Offline PWA** — Service worker caching for rural low-connectivity use
-7. **IBM Code Engine deployment** — Full production deployment on IBM Cloud
-8. **A/B testing** — Compare Granite vs rule-based recommendations for farmer outcomes
+7. **A/B testing** — Compare Granite vs rule-based recommendations for farmer outcomes
 
 ---
 

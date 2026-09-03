@@ -3,7 +3,7 @@ Pydantic schemas for Buyer and BuyerRequirement.
 """
 from datetime import date, datetime
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class BuyerRequirementBase(BaseModel):
@@ -20,12 +20,11 @@ class BuyerRequirementCreate(BuyerRequirementBase):
 
 
 class BuyerRequirementOut(BuyerRequirementBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     buyer_id: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class BuyerBase(BaseModel):
@@ -39,12 +38,11 @@ class BuyerCreate(BuyerBase):
 
 
 class BuyerOut(BuyerBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     user_id: int
     requirements: List[BuyerRequirementOut] = []
-
-    class Config:
-        from_attributes = True
 
 
 class BuyerListItem(BaseModel):

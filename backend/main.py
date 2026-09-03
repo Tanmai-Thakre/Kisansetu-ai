@@ -8,6 +8,7 @@ import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 from dotenv import load_dotenv
 
 from app.api import (
@@ -53,6 +54,23 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization", "Accept"],
 )
+
+# ── Security headers middleware ───────────────────────────────────────────────
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add security headers to every response. Does not affect CORS."""
+    async def dispatch(self, request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        # Only cache static responses; API endpoints are dynamic
+        if request.url.path.startswith("/api") or request.url.path == "/health":
+            response.headers["Cache-Control"] = "no-store"
+        return response
+
+app.add_middleware(SecurityHeadersMiddleware)
 
 # ── Global exception handler — never leak stack traces ────────────────────────
 @app.exception_handler(Exception)

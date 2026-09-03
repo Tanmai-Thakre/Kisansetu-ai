@@ -3,7 +3,7 @@ Pydantic schemas for MarketPrice.
 """
 from datetime import date, datetime
 from typing import Optional, List
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class MarketPriceBase(BaseModel):
@@ -23,11 +23,10 @@ class MarketPriceCreate(MarketPriceBase):
 
 
 class MarketPriceOut(MarketPriceBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class MarketSummary(BaseModel):

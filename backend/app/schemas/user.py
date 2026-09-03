@@ -3,7 +3,7 @@ Pydantic schemas for User and FarmerProfile.
 """
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class FarmerProfileBase(BaseModel):
@@ -18,11 +18,10 @@ class FarmerProfileCreate(FarmerProfileBase):
 
 
 class FarmerProfileOut(FarmerProfileBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     user_id: int
-
-    class Config:
-        from_attributes = True
 
 
 class UserBase(BaseModel):
@@ -38,12 +37,11 @@ class UserCreate(UserBase):
 
 
 class UserOut(UserBase):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     created_at: datetime
     farmer_profile: Optional[FarmerProfileOut] = None
-
-    class Config:
-        from_attributes = True
 
 
 class LoginRequest(BaseModel):
