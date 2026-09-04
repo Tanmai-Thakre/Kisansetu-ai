@@ -1,0 +1,133 @@
+{
+  "name": "KisanSetu AI",
+  "description": "AI-powered cotton & groundnut market linkage platform for Gujarat farmers. Connects smallholder farmers to buyers, provides mandi price forecasts, quality grading, storage advice, and income dashboards — powered by IBM Granite (watsonx.ai).",
+  "version": "10.0.0-final",
+  "keywords": [
+    "agritech",
+    "ibm-granite",
+    "watsonx",
+    "fastapi",
+    "nextjs",
+    "postgresql"
+  ],
+  "website": "https://github.com/your-org/kisansetu-ai",
+  "repository": "https://github.com/your-org/kisansetu-ai",
+  "logo": "https://raw.githubusercontent.com/your-org/kisansetu-ai/main/frontend/public/logo.png",
+
+  "stack": "container",
+
+  "buildpacks": [],
+
+  "scripts": {
+    "postdeploy": "python backend/app/database/migrate.py"
+  },
+
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1x"
+    }
+  },
+
+  "image": {
+    "backend": "us.icr.io/kisansetu/backend:v10",
+    "frontend": "us.icr.io/kisansetu/frontend:v10"
+  },
+
+  "addons": [
+    {
+      "plan": "databases-for-postgresql:standard",
+      "as": "DATABASE"
+    }
+  ],
+
+  "env": {
+    "DATABASE_URL": {
+      "description": "PostgreSQL connection string. Automatically set when the databases-for-postgresql addon is provisioned. Format: postgresql://user:password@host:port/dbname",
+      "required": true
+    },
+    "IBM_API_KEY": {
+      "description": "IBM Cloud IAM API key for watsonx.ai / IBM Granite access. Obtain from https://cloud.ibm.com → Manage → Access (IAM) → API keys. App runs in deterministic fallback mode without this.",
+      "required": false
+    },
+    "IBM_PROJECT_ID": {
+      "description": "watsonx.ai project ID. Obtain from https://dataplatform.cloud.ibm.com → Projects. Required together with IBM_API_KEY to enable Granite.",
+      "required": false
+    },
+    "IBM_GRANITE_MODEL": {
+      "description": "IBM Granite model ID to use for AI inference.",
+      "value": "ibm/granite-3-8b-instruct",
+      "required": false
+    },
+    "IBM_REGION": {
+      "description": "IBM Cloud region where your watsonx.ai instance is hosted.",
+      "value": "us-south",
+      "required": false
+    },
+    "SECRET_KEY": {
+      "description": "Random secret key used for JWT signing. Must be at least 32 characters. Generate with: python -c \"import secrets; print(secrets.token_hex(32))\"",
+      "generator": "secret",
+      "required": true
+    },
+    "JWT_ALGORITHM": {
+      "description": "Algorithm used to sign JWT tokens.",
+      "value": "HS256",
+      "required": false
+    },
+    "ACCESS_TOKEN_EXPIRE_MINUTES": {
+      "description": "JWT token lifetime in minutes.",
+      "value": "1440",
+      "required": false
+    },
+    "CORS_ORIGINS": {
+      "description": "Comma-separated list of allowed CORS origins (no spaces). Set to your frontend URL in production.",
+      "value": "http://localhost:3000",
+      "required": true
+    },
+    "NEXT_PUBLIC_API_URL": {
+      "description": "Public URL of the backend API, baked into the Next.js bundle at build time. Must be set before building the frontend image.",
+      "value": "http://localhost:8000",
+      "required": true
+    },
+    "MARKET_DATA_PROVIDER": {
+      "description": "Market data source. Use 'demo' for built-in synthetic data (no external API needed) or 'live' for real AgMarkNet/eNAM data (requires MARKET_API_KEY).",
+      "value": "demo",
+      "required": false
+    },
+    "MARKET_API_KEY": {
+      "description": "API key for AgMarkNet/eNAM live market data. Only required when MARKET_DATA_PROVIDER=live.",
+      "required": false
+    },
+    "QUALITY_UPLOAD_DIR": {
+      "description": "Directory path for storing quality-grading image uploads.",
+      "value": "./uploads/quality",
+      "required": false
+    }
+  },
+
+  "formation": {
+    "backend": {
+      "quantity": 1,
+      "size": "standard-1x",
+      "command": "uvicorn main:app --host 0.0.0.0 --port 8000"
+    },
+    "frontend": {
+      "quantity": 1,
+      "size": "standard-1x",
+      "command": "node server.js"
+    }
+  },
+
+  "healthchecks": {
+    "backend": {
+      "path": "/health",
+      "timeout": 10,
+      "interval": 30
+    },
+    "frontend": {
+      "path": "/",
+      "timeout": 10,
+      "interval": 30
+    }
+  }
+}
