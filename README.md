@@ -1,41 +1,57 @@
-# KisanSetu AI
+# 🌾 KisanSetu AI
 
-**AI-Powered Cotton & Groundnut Market Linkage Platform for Gujarat Farmers**
+**AI-Powered Market Linkage Platform for Cotton & Groundnut Farmers in Gujarat**
 
-IBM Hackathon — Challenge 13 | Phase 10 (Final) | Version 10.0.0-final
+[![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![IBM Granite](https://img.shields.io/badge/IBM%20Granite-3%208B-0f62fe?logo=ibm&logoColor=white)](https://www.ibm.com/products/watsonx-ai)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](docker-compose.yml)
 
 ---
 
-## What Is KisanSetu AI?
+KisanSetu AI connects smallholder farmers to markets using five specialized AI agents — all grounded in real data and synthesized by **IBM Granite** (watsonx.ai). Farmers ask questions in **English, Gujarati, or Hindi** and receive actionable, data-backed answers about prices, buyers, storage, quality, and income.
 
-KisanSetu AI helps Gujarat farmers make informed market decisions. A farmer asks a question in English, Gujarati, or Hindi. Five specialized AI agents analyse market data, find buyers, assess quality, evaluate storage strategies, and calculate income. IBM Granite synthesizes all results into a single, farmer-friendly answer.
+> **No invented data.** IBM Granite handles only language and reasoning. Every number — price, buyer offer, income estimate — comes from a deterministic agent.
+
+---
+
+## ✨ Features
+
+- **🤖 Multi-Agent Orchestration** — Five specialized agents run in parallel; intent routing selects only the agents relevant to each query
+- **💬 Multilingual AI Chat** — Full support for English (`en`), Gujarati (`gu`), and Hindi (`hi`)
+- **📈 Mandi Price Forecasting** — 15-day price predictions for cotton and groundnut across Gujarat APMCs
+- **🤝 Buyer Matching** — Finds the best buyers by price, location, and crop variety
+- **🏪 Storage Advisor** — Sell-now vs. store-and-wait recommendations with break-even analysis
+- **✅ Quality Grading** — Parameter-based quality scoring (moisture, length, grade)
+- **💰 Income Dashboard** — Net income estimates with cost deductions and risk levels
+- **🔒 Responsible AI** — All forecasts labelled `ESTIMATE`; graceful fallback when Granite is unavailable
+- **🐳 Docker-Ready** — Single `docker compose up --build` starts backend, frontend, and PostgreSQL
+
+---
+
+## 🏗️ Architecture
 
 ```
 Farmer Question (English / Gujarati / Hindi)
            ↓
-   Agent Orchestrator (Intent Classification)
+   AgentOrchestrator — intent classification
            ↓
   ┌────────────────────────────────────────┐
-  │  Mandi Forecast Agent    (Phase 3)     │
-  │  Buyer Matching Agent    (Phase 4)     │
-  │  Storage Advisor Agent   (Phase 5)     │
-  │  Quality Grading Agent   (Phase 6)     │
-  │  Income Dashboard Agent  (Phase 7)     │
+  │  MandiForecastAgent  → price forecast  │
+  │  BuyerMatchingAgent  → buyer offers    │
+  │  StorageAdvisorAgent → sell/store rec  │
+  │  QualityGradingAgent → quality score   │
+  │  IncomeDashboardAgent→ net income est  │
   └────────────────────────────────────────┘
            ↓
-   Structured JSON Results (grounded data)
+   Structured JSON (grounded, deterministic)
            ↓
-     IBM Granite (watsonx.ai)
+     IBM Granite 3 8B (watsonx.ai)
            ↓
   Simple, actionable farmer response
 ```
-
-Granite **never invents** prices, buyers, forecasts, or income figures.
-All numerical facts come from the underlying deterministic agents.
-
----
-
-## Architecture
 
 ```mermaid
 flowchart TD
@@ -80,136 +96,116 @@ flowchart TD
     Frontend --> APIs
     CHAT --> ORC
     ORCH --> ORC
-    ORC --> A1
-    ORC --> A2
-    ORC --> A3
-    ORC --> A4
-    ORC --> A5
+    ORC --> A1 & A2 & A3 & A4 & A5
     ORC --> GC
     GC --> IAM --> WX
-    A1 --> DB
-    A2 --> DB
-    A3 --> DB
-    A4 --> DB
-    A5 --> DB
+    A1 & A2 & A3 & A4 & A5 --> DB
     GC -.->|fallback| PR
 ```
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 kisansetu-ai/
 ├── backend/
-│   ├── main.py                      # FastAPI app entry point (Phase 10)
-│   ├── requirements.txt
+│   ├── main.py                      # FastAPI application entry point
+│   ├── requirements.txt             # Production dependencies
+│   ├── requirements-dev.txt         # Dev/test dependencies (pytest)
 │   ├── Dockerfile
 │   ├── app/
 │   │   ├── ai/
-│   │   │   ├── granite_client.py    # IBM Granite / watsonx.ai client (Phase 8)
-│   │   │   ├── orchestrator.py      # AgentOrchestrator — intent + execution (Phase 8)
-│   │   │   └── prompts.py           # Grounded prompt templates (Phase 8+9)
+│   │   │   ├── granite_client.py    # IBM Granite / watsonx.ai client
+│   │   │   ├── orchestrator.py      # AgentOrchestrator — intent + execution
+│   │   │   └── prompts.py           # Data-grounded prompt templates
 │   │   ├── api/
-│   │   │   ├── chat.py              # POST /api/chat  (Phase 8)
-│   │   │   ├── agents.py            # POST /api/agents/orchestrate  (Phase 8)
-│   │   │   ├── demo.py              # GET/POST /api/demo  (Phase 9)
-│   │   │   ├── market.py            # Phases 1–2
-│   │   │   ├── buyers.py            # Phase 4
-│   │   │   ├── quality.py           # Phase 6
-│   │   │   └── income.py            # Phase 7
+│   │   │   ├── chat.py              # POST /api/chat
+│   │   │   ├── agents.py            # POST /api/agents/orchestrate
+│   │   │   ├── demo.py              # GET/POST /api/demo
+│   │   │   ├── market.py            # Market prices
+│   │   │   ├── buyers.py            # Buyer matching
+│   │   │   ├── quality.py           # Quality grading
+│   │   │   └── income.py            # Income estimates
 │   │   ├── agents/
-│   │   │   ├── buyer_matching/      # Phase 4
-│   │   │   ├── storage_advisor/     # Phase 5
-│   │   │   ├── quality/             # Phase 6
-│   │   │   └── income/              # Phase 7
-│   │   ├── forecasting/             # Phase 3 — Mandi price forecasting
-│   │   ├── models/                  # SQLAlchemy models
-│   │   ├── schemas/                 # Pydantic schemas
-│   │   └── database/                # DB connection, migrations
-│   └── tests/
-│       ├── test_market_phase2.py    # 45 tests
-│       ├── test_market_phase3.py    # Market forecast tests
-│       ├── test_market_phase4.py    # Buyer matching tests
-│       ├── test_market_phase5.py    # Storage advisor tests
-│       ├── test_quality_phase6.py   # Quality grading tests
-│       ├── test_income_phase7.py    # Income dashboard tests
-│       ├── test_granite_phase8.py   # 48 tests — Granite + orchestrator
-│       ├── test_ux_phase9.py        # 38 tests — UX, localization, demo
-│       └── test_phase10_final.py    # 44 tests — final regression
+│   │   │   ├── buyer_matching/
+│   │   │   ├── storage_advisor/
+│   │   │   ├── quality/
+│   │   │   └── income/
+│   │   ├── forecasting/             # Mandi price forecasting
+│   │   ├── models/                  # SQLAlchemy ORM models
+│   │   ├── schemas/                 # Pydantic request/response schemas
+│   │   └── database/                # DB connection & migrations
+│   └── tests/                       # 303 tests across all phases
 │
 ├── frontend/
 │   ├── app/
-│   │   ├── farmer/
-│   │   │   ├── dashboard/page.tsx   # Main dashboard
-│   │   │   ├── chat/page.tsx        # AI Chat page (Phase 8)
-│   │   │   ├── buyers/page.tsx      # Buyer matching
-│   │   │   ├── quality/page.tsx     # Quality grading
-│   │   │   ├── income/page.tsx      # Income dashboard
-│   │   │   └── advisor/page.tsx     # Storage advisor
-│   │   └── buyer/dashboard/page.tsx
+│   │   └── farmer/
+│   │       ├── dashboard/page.tsx   # Main farmer dashboard
+│   │       ├── chat/page.tsx        # AI chat interface
+│   │       ├── buyers/page.tsx      # Buyer matching view
+│   │       ├── quality/page.tsx     # Quality grading view
+│   │       ├── income/page.tsx      # Income dashboard
+│   │       └── advisor/page.tsx     # Storage advisor
 │   ├── components/
 │   │   ├── dashboard/
-│   │   │   ├── AIChatWidget.tsx     # AI chat with agent status (Phase 8+9)
-│   │   │   ├── DemoPanel.tsx        # Demo scenario panel (Phase 9)
-│   │   │   ├── QuickActions.tsx     # Quick action buttons (Phase 9)
-│   │   │   ├── BestBuyerCard.tsx
-│   │   │   └── AIRecommendationCard.tsx
-│   │   ├── layout/Navigation.tsx    # With AI Chat link
+│   │   │   ├── AIChatWidget.tsx     # AI chat with agent status
+│   │   │   ├── DemoPanel.tsx        # One-click demo scenario
+│   │   │   ├── QuickActions.tsx     # Quick action buttons
+│   │   │   └── BestBuyerCard.tsx
 │   │   └── ui/
-│   │       ├── DataSourceBadge.tsx  # LIVE / DEMO / ESTIMATE badges (Phase 9)
-│   │       └── ResponsibleAINotice.tsx # Responsible AI notice (Phase 9)
+│   │       ├── DataSourceBadge.tsx  # LIVE / DEMO / ESTIMATE badges
+│   │       └── ResponsibleAINotice.tsx
 │   ├── locales/
-│   │   ├── en.json                  # English translations
-│   │   ├── gu.json                  # Gujarati translations
-│   │   └── hi.json                  # Hindi translations
-│   ├── lib/api.ts                   # All API calls (Axios)
-│   ├── types/index.ts               # TypeScript types
+│   │   ├── en.json                  # English
+│   │   ├── gu.json                  # Gujarati
+│   │   └── hi.json                  # Hindi
+│   ├── lib/api.ts                   # Axios API client
 │   ├── hooks/useLanguage.ts         # Language switcher hook
-│   ├── next.config.js               # standalone output for Docker
 │   └── Dockerfile
 │
 ├── data/seed/seed.py                # Demo seed data
 ├── docker-compose.yml
-└── .env.example                     # All required environment variables
+├── .env.example                     # All required environment variables
+└── app.json                         # IBM Cloud / Code Engine deployment manifest
 ```
 
 ---
 
-## Quick Start (Local Development)
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Python 3.11+
-- Node.js 18+
-- Git
+| Tool | Version |
+|------|---------|
+| Python | 3.11+ |
+| Node.js | 18+ |
+| Git | any |
+| Docker + Compose | optional, for container mode |
 
-### 1. Clone & configure
+### 1 — Clone & configure
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/your-org/kisansetu-ai.git
 cd kisansetu-ai
 cp .env.example .env
-# Edit .env — add IBM credentials if available (optional for demo mode)
+# Edit .env — add IBM credentials to enable Granite (optional; app runs without them)
 ```
 
-### 2. Backend
+### 2 — Start the backend
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate         # Windows: venv\Scripts\activate
-# Production runtime dependencies only:
+source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-# For running tests, also install dev dependencies:
-# pip install -r requirements-dev.txt
 python -m uvicorn main:app --reload --port 8000
 ```
 
-API available at: http://localhost:8000  
-Swagger docs: http://localhost:8000/docs
+- API: http://localhost:8000  
+- Swagger docs: http://localhost:8000/docs
 
-### 3. Frontend
+### 3 — Start the frontend
 
 ```bash
 cd frontend
@@ -217,9 +213,9 @@ npm install
 npm run dev
 ```
 
-Frontend available at: http://localhost:3000
+- App: http://localhost:3000
 
-### 4. Load demo data (optional)
+### 4 — Load demo data (optional)
 
 ```bash
 cd data/seed
@@ -228,88 +224,64 @@ python seed.py
 
 ---
 
-## Docker Deployment
+## 🐳 Docker Deployment
 
 ```bash
-# Build and start all services
 docker compose up --build
-
-# Backend: http://localhost:8000
-# Frontend: http://localhost:3000
-# Database: PostgreSQL on port 5432
 ```
 
-### Environment variables for Docker
-
-```bash
-# Required for IBM Granite
-IBM_API_KEY=your-ibm-cloud-api-key
-IBM_PROJECT_ID=your-watsonx-project-id
-IBM_GRANITE_MODEL=ibm/granite-3-8b-instruct
-IBM_REGION=us-south
-
-# Database
-DATABASE_URL=postgresql://kisansetu:kisansetu@db:5432/kisansetu_db
-
-# Frontend
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# CORS (production)
-CORS_ORIGINS=https://your-frontend-domain.com
-```
-
-Without IBM credentials, the application runs in **deterministic fallback mode** — all agents work normally and structured data is returned without Granite synthesis.
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| PostgreSQL | localhost:5432 |
 
 ---
 
-## IBM Granite Integration
+## ⚙️ Environment Variables
 
-### Configuration
+Copy [`.env.example`](.env.example) to `.env` and set the values below.
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `IBM_API_KEY` | IBM Cloud IAM API key | — (required for Granite) |
-| `IBM_PROJECT_ID` | watsonx.ai project ID | — (required for Granite) |
-| `IBM_GRANITE_MODEL` | Model ID | `ibm/granite-3-8b-instruct` |
-| `IBM_REGION` | IBM Cloud region | `us-south` |
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `DATABASE_URL` | ✅ | — | PostgreSQL connection string |
+| `IBM_API_KEY` | ⬜ | — | IBM Cloud IAM API key (enables Granite) |
+| `IBM_PROJECT_ID` | ⬜ | — | watsonx.ai project ID |
+| `IBM_GRANITE_MODEL` | ⬜ | `ibm/granite-3-8b-instruct` | Granite model ID |
+| `IBM_REGION` | ⬜ | `us-south` | IBM Cloud region |
+| `SECRET_KEY` | ✅ | — | JWT signing secret (≥ 32 chars) |
+| `CORS_ORIGINS` | ✅ | `http://localhost:3000` | Allowed frontend origins (comma-separated) |
+| `NEXT_PUBLIC_API_URL` | ✅ | `http://localhost:8000` | Backend URL (baked into frontend at build time) |
+| `MARKET_DATA_PROVIDER` | ⬜ | `demo` | `demo` for synthetic data, `live` for AgMarkNet/eNAM |
+| `MARKET_API_KEY` | ⬜ | — | API key for live market data |
 
-Legacy names (`WATSONX_URL`, `WATSONX_PROJECT_ID`, `IBM_CLOUD_API_KEY`) are also accepted.
+> **Without IBM credentials** the app runs in **deterministic fallback mode** — all agents work normally, structured data is returned, and Granite synthesis is skipped. The UI shows *"AI Service Unavailable — Showing rule-based market analysis"*.
 
-### How Granite is used
+---
 
-Granite handles only **language and reasoning** — never data generation:
+## 🤖 IBM Granite Integration
 
-| Task | Who does it |
-|------|-------------|
+Granite handles **only language and reasoning** — never data generation:
+
+| Task | Responsible component |
+|------|-----------------------|
 | Intent classification | Granite (fallback: keyword heuristic) |
 | Final answer synthesis | Granite |
-| Multilingual response (en/gu/hi) | Granite |
+| Multilingual response | Granite |
 | Market prices | `MandiForecastAgent` |
-| Buyer matching | `BuyerMatchingAgent` |
-| Storage advice | `StorageAdvisorAgent` |
-| Quality grading | `QualityGradingAgent` |
-| Income calculation | `IncomeDashboardAgent` |
+| Buyer offers | `BuyerMatchingAgent` |
+| Storage recommendation | `StorageAdvisorAgent` |
+| Quality score | `QualityGradingAgent` |
+| Income estimate | `IncomeDashboardAgent` |
 
-### Fallback mode
-
-If IBM Granite is unavailable (no credentials, timeout, rate limit):
-
-1. All five agents still run and return structured data
-2. A deterministic rule-based summary is generated in the requested language
-3. The response includes `"granite_used": false`
-4. The UI shows: *"AI Service Unavailable — Showing rule-based market analysis"*
-
-The application never fabricates data in either mode.
+Legacy variable names (`WATSONX_URL`, `WATSONX_PROJECT_ID`, `IBM_CLOUD_API_KEY`) are also accepted for backwards compatibility.
 
 ---
 
-## API Reference
+## 📡 API Reference
 
-### Chat
+### `POST /api/chat`
 
-```
-POST /api/chat
-```
 ```json
 {
   "message": "Should I sell my cotton now?",
@@ -320,7 +292,7 @@ POST /api/chat
   "quantity": 100.0
 }
 ```
-Response:
+
 ```json
 {
   "answer": "Current price: ₹7,200/q ...",
@@ -331,11 +303,8 @@ Response:
 }
 ```
 
-### Orchestrate
+### `POST /api/agents/orchestrate`
 
-```
-POST /api/agents/orchestrate
-```
 ```json
 {
   "farmer_id": 1,
@@ -346,7 +315,7 @@ POST /api/agents/orchestrate
   "quantity": 100.0
 }
 ```
-Response:
+
 ```json
 {
   "agents_used": ["buyer", "forecast", "storage"],
@@ -358,49 +327,39 @@ Response:
 }
 ```
 
-### Demo
-
-```
-GET  /api/demo/farmer           — Returns pre-configured demo farmer profile
-POST /api/demo/run              — Runs full complex scenario (all 4 agents)
-```
-```json
-{ "language": "en" }   // "en", "gu", or "hi"
-```
-
 ### Other endpoints
 
 | Endpoint | Description |
 |----------|-------------|
 | `GET /health` | Health check with version and agent status |
-| `GET /api/market/prices/latest?crop=cotton` | Current market prices |
-| `GET /api/buyers/matches?crop=cotton` | Buyer matching |
-| `GET /api/agents/storage-advisor/preview` | Storage advice |
-| `GET /api/agents/income/preview` | Income estimate |
+| `GET /api/market/prices/latest?crop=cotton` | Latest market prices |
+| `GET /api/buyers/matches?crop=cotton` | Buyer matching results |
+| `GET /api/agents/storage-advisor/preview` | Storage advice preview |
+| `GET /api/agents/income/preview` | Income estimate preview |
 | `GET /api/chat/status` | Granite availability status |
+| `GET /api/demo/farmer` | Pre-configured demo farmer profile |
+| `POST /api/demo/run` | Run full demo scenario (all agents) |
 
 ---
 
-## Intent Routing
+## 🧭 Intent Routing
 
-| Intent | Keywords | Agents invoked |
-|--------|----------|----------------|
+| Intent | Trigger keywords | Agents invoked |
+|--------|-----------------|----------------|
 | `PRICE` | price, rate, mandi | forecast |
 | `FORECAST` | forecast, predict, will price | forecast |
 | `BUYER` | buyer, who buy, find buyer | buyer |
 | `SELL_OR_STORE` | sell now, store, wait, hold | storage, forecast |
 | `QUALITY` | quality, grade, test | quality |
 | `INCOME` | income, earn, profit, how much | income, forecast, buyer |
-| `COMPLEX` | multiple aspects | forecast, buyer, storage, income |
+| `COMPLEX` | 3+ aspects detected | forecast, buyer, storage, income |
 | `GENERAL` | anything else | storage, forecast |
 
-Complex queries (3+ aspects) trigger all four main agents in one pass, with a single Granite call for synthesis.
+Complex queries trigger all four main agents in one pass with a single Granite synthesis call.
 
 ---
 
-## Language Support
-
-Three languages are fully supported throughout:
+## 🌐 Language Support
 
 | Language | Code | Script |
 |----------|------|--------|
@@ -408,96 +367,87 @@ Three languages are fully supported throughout:
 | Gujarati | `gu` | ગુજરાતી |
 | Hindi | `hi` | हिन्दी |
 
-Numerical values are always in digits (₹7,200), never spelled out.
-Granite generates the explanation in the requested language; the backend agents return language-agnostic JSON.
+Granite generates the explanation in the requested language. Agents always return language-agnostic JSON. Numerical values are always in digits (₹7,200), never spelled out.
 
 ---
 
-## Demo Flow
+## 🎬 Demo Flow
 
-A pre-configured cotton farmer scenario is available without any manual setup:
+A pre-configured cotton farmer scenario runs without any setup:
 
 1. Open http://localhost:3000/farmer/dashboard
 2. Click **Load Demo** in the Demo Panel
 3. Click **Run Full Analysis**
-4. View results in English, Gujarati, or Hindi
+4. Switch between English, Gujarati, and Hindi
 
-The demo invokes all four main agents and asks:
+The demo query:
 
 > *"I have 100 quintals of cotton in Rajkot. Find the best buyer, predict the price for the next 15 days, tell me whether I should sell or store, and estimate my income."*
 
-Expected response fields:
-- Current market price
-- 15-day price forecast
-- Best buyer name and offer
-- Sell/store recommendation
-- Expected net income
-- Risk level and confidence
-- One-line disclaimer
+Expected response includes: current market price · 15-day forecast · best buyer offer · sell/store recommendation · expected net income · risk level · confidence score.
 
 ---
 
-## Tests
+## 🧪 Tests
 
 ```bash
-cd kisansetu-ai/backend
-
-# Install dev dependencies (pytest + pytest-asyncio)
+cd backend
 pip install -r requirements-dev.txt
 
-# All 303 tests
+# Run all 303 tests
 python -m pytest tests/ -v
 
-# Individual phases
-python -m pytest tests/test_granite_phase8.py -v   # 48 tests
-python -m pytest tests/test_ux_phase9.py -v        # 38 tests
-python -m pytest tests/test_phase10_final.py -v    # 44 tests
+# Individual test suites
+python -m pytest tests/test_market_phase2.py -v   # Market data & forecasting (45)
+python -m pytest tests/test_granite_phase8.py -v  # Granite, orchestrator, intent (48)
+python -m pytest tests/test_ux_phase9.py -v       # Translations, demo API, responsible AI (38)
+python -m pytest tests/test_phase10_final.py -v   # Regression, security, CORS, fallback (44)
 ```
 
-| Test file | Tests | What it covers |
-|-----------|-------|----------------|
-| test_market_phase2.py | 45 | Market data, prices, forecasting |
-| test_quality_phase6.py | ~20 | Quality grading agent |
-| test_income_phase7.py | ~35 | Income dashboard agent |
-| test_granite_phase8.py | 48 | Granite client, orchestrator, intent routing, grounding |
-| test_ux_phase9.py | 38 | Translations, demo API, responsible AI, navigation |
-| test_phase10_final.py | 44 | Health, backward-compat, exception handler, security, CORS, fallback |
+| Test file | Tests | Coverage |
+|-----------|------:|---------|
+| `test_market_phase2.py` | 45 | Market data, prices, forecasting |
+| `test_market_phase3.py` | — | Mandi forecast |
+| `test_market_phase4.py` | — | Buyer matching |
+| `test_market_phase5.py` | — | Storage advisor |
+| `test_quality_phase6.py` | ~20 | Quality grading agent |
+| `test_income_phase7.py` | ~35 | Income dashboard agent |
+| `test_granite_phase8.py` | 48 | Granite client, orchestrator, grounding |
+| `test_ux_phase9.py` | 38 | Translations, demo API, responsible AI |
+| `test_phase10_final.py` | 44 | Health, backward-compat, security, CORS |
 
 ---
 
-## Responsible AI
+## 🛡️ Responsible AI
 
-KisanSetu AI follows these principles:
-
-1. **No invented data** — Granite only references data supplied in the structured prompt
-2. **Transparent uncertainty** — Forecasts are labelled `ESTIMATE`, not fact
-3. **No profit guarantees** — System never guarantees profit
-4. **Data source labelling** — UI shows `LIVE` / `DEMO` / `ESTIMATE` badges
+1. **No invented data** — Granite only references facts supplied in the structured prompt
+2. **Transparent uncertainty** — Forecasts are labelled `ESTIMATE`, never presented as fact
+3. **No profit guarantees** — The system never guarantees a specific income outcome
+4. **Data source labelling** — UI shows `LIVE` / `DEMO` / `ESTIMATE` badges on all figures
 5. **Fallback transparency** — Users are told when AI synthesis is unavailable
-6. **No credential exposure** — IBM API keys are server-side only; never returned in API responses
-7. **Agent failure disclosure** — If an agent fails, the response notes which data is unavailable
+6. **Credential safety** — IBM API keys are server-side only; never returned in API responses
+7. **Failure disclosure** — If an agent fails, the response explicitly states which data is missing
 
 ---
 
-## Security
+## 🔐 Security
 
-- IBM API keys loaded from environment variables, never hardcoded
-- CORS restricted to configured origins (`CORS_ORIGINS` env var)
+- IBM API keys and secrets loaded from environment variables — never hardcoded
+- CORS restricted to configured origins via `CORS_ORIGINS`
 - Security headers on every response: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`, `Cache-Control: no-store`
 - Global exception handler prevents stack trace leakage (500 → generic JSON)
-- Pydantic validation on all inputs (422 on bad data)
-- Farmer data scoped to authenticated user via `farmer_id`
+- Pydantic validation on all inputs (422 on malformed requests)
 - System prompts never returned in API responses
-- No credentials stored in frontend bundle
-- Production Docker image: no test dependencies installed
+- No credentials stored in the frontend bundle
+- Production Docker image excludes all test dependencies
 
 ---
 
-## IBM Cloud Deployment
+## ☁️ IBM Cloud Deployment
 
-See [`ibm-cloud-deploy.md`](ibm-cloud-deploy.md) for the full IBM Cloud Code Engine deployment guide including:
+See [`ibm-cloud-deploy.md`](ibm-cloud-deploy.md) for the full IBM Cloud Code Engine deployment guide, including:
 
-- Container Registry setup
+- Container Registry (`us.icr.io`) setup
 - Code Engine application deployment
 - IBM Cloud Databases for PostgreSQL
 - Secrets and ConfigMaps
@@ -506,46 +456,48 @@ See [`ibm-cloud-deploy.md`](ibm-cloud-deploy.md) for the full IBM Cloud Code Eng
 
 ---
 
-## Known Limitations
-
-- **No real-time market data** — Uses synthetic data in demo mode; connect a live AGMARKNET/eNAM API key for production
-- **Image upload quality grading** — Phase 6 quality agent supports manual parameter mode; image-based grading requires a vision model (future work)
-- **Voice input** — Placeholder UI exists; not yet functional
-
----
-
-## Recommended Next Steps (Phase 11+)
-
-1. **Live market data** — Integrate AGMARKNET / eNAM / commodity exchange APIs
-2. **Real farmer auth** — Add OTP/Aadhaar-based authentication
-3. **Push notifications** — Alert farmers when prices hit target thresholds
-4. **Image-based quality** — Integrate a vision model for cotton/groundnut image assessment
-5. **Voice input** — Add speech-to-text (Web Speech API / Whisper) for low-literacy farmers
-6. **Offline PWA** — Service worker caching for rural low-connectivity use
-7. **A/B testing** — Compare Granite vs rule-based recommendations for farmer outcomes
-
----
-
-## Technology Stack
+## 🧰 Technology Stack
 
 | Layer | Technology |
 |-------|-----------|
 | AI / LLM | IBM Granite 3 8B Instruct (watsonx.ai) |
-| Backend | FastAPI 0.115, Python 3.11+ |
+| Backend | FastAPI 0.111, Python 3.11+ |
 | ORM | SQLAlchemy 2.0 |
-| Database | SQLite (dev) / PostgreSQL (prod) |
-| Frontend | Next.js 15, React 19, TypeScript |
-| Styling | Tailwind CSS |
-| Charts | Recharts |
-| HTTP client | Axios (frontend), httpx (backend) |
-| Containerisation | Docker, Docker Compose |
+| Validation | Pydantic 2.7 |
+| HTTP client (backend) | httpx 0.27 |
+| Database | SQLite (dev) / PostgreSQL 15 (prod) |
+| Frontend | Next.js 15, React 19, TypeScript 5 |
+| Styling | Tailwind CSS 3 |
+| Charts | Recharts 2 |
+| Internationalisation | next-intl 3 |
+| HTTP client (frontend) | Axios 1.7 |
+| Containerisation | Docker, Docker Compose 3.9 |
 | Testing | pytest, FastAPI TestClient |
 
 ---
 
-## License
+## ⚠️ Known Limitations
 
-MIT — See LICENSE file for details.
+- **No real-time market data** — Uses synthetic data in demo mode. Connect a live AGMARKNET/eNAM API key (`MARKET_DATA_PROVIDER=live`) for production use.
+- **Image-based quality grading** — The quality agent supports manual parameter input. Image-based grading requires a vision model (future work).
+- **Voice input** — Placeholder UI exists; speech-to-text is not yet implemented.
+
+---
+
+## 🗺️ Roadmap
+
+1. **Live market data** — Integrate AGMARKNET / eNAM / commodity exchange APIs
+2. **Farmer authentication** — OTP or Aadhaar-based sign-in
+3. **Push notifications** — Alert farmers when prices hit target thresholds
+4. **Image-based quality** — Vision model for cotton/groundnut photo assessment
+5. **Voice input** — Web Speech API / Whisper for low-literacy farmers
+6. **Offline PWA** — Service worker caching for rural low-connectivity use
+
+---
+
+## 📄 License
+
+MIT — see [LICENSE](LICENSE) for details.
 
 ---
 
